@@ -64,7 +64,9 @@ start, end = str(start), str(end)
 
 # 검색일자 지정
 pg.doubleClick(396, 26)
+pg.position()
 pg.click(145, 62)
+pg.click(207, 171)
 pg.click(89, 205)
 pg.drag(-70,0, 1, button='left')
 pg.hotkey('backspace')
