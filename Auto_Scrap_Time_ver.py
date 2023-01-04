@@ -1,7 +1,31 @@
-# 관리자 권한으로 Pycharm실행 필요(윈도우에서 직접 실행 필요)
 import schedule
 import time
+import cv2
+import pyautogui as pg
+import numpy as np
 
+# 프로그램이 어떻게 돌아가다가 오류가 발생하는지 알 수 있는 화면 녹화 코드
+def record():
+    resolution = (1920, 1080)
+    codec = cv2.VideoWriter_fourcc(*'XVID')
+    filename = 'verify.avi'
+    location = 'C:/Users/DELL9020/Desktop/화면 녹화 테스트'
+    fps = 10.0
+    out = cv2.VideoWriter(location+'/'+filename, codec, fps, resolution)
+
+    while True:
+        img = pg.screenshot()
+        frame = np.array(img)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        out.write(frame)
+
+        if cv2.waitKey(1) == ord('q'):
+            out.release()
+            cv2.destroyAllWindows()
+            break
+
+
+# 관리자 권한으로 Pycharm실행 필요(윈도우에서 직접 실행 필요)
 
 def auto_scrap():
     # 필요한 라이브러리 import
@@ -82,7 +106,7 @@ def auto_scrap():
 
 
     # 검색어 타이핑 공간 마련
-    search_list = ['농협', '농협유통', '양재 하나로']
+    search_list = ['농협유통', '양재 하나로']
 
     for n in range(0, len(search_list)):
         pg.click(396, 26)
@@ -150,8 +174,10 @@ def auto_scrap():
         pg.sleep(2)
 
 
-schedule.every().day.at("06:30").do(auto_scrap)
-schedule.every().day.at("06:45").do(exit)
+schedule.every().day.at("06:30:00").do(auto_scrap)
+#schedule.every().day.at("17:40:10").do(record)
+schedule.every().day.at("06:50:00").do(exit)
+
 
 while True:
     schedule.run_pending()
