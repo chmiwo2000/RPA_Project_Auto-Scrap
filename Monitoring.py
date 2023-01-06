@@ -28,9 +28,6 @@ def record():
     out.release()
     cv2.destroyAllWindows()
 
-record()
-
-
 recording = False
 
 def record_startstop():

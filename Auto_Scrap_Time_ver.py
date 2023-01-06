@@ -1,34 +1,34 @@
-import schedule
-import time
-import cv2
-import pyautogui as pg
-import numpy as np
+import threading
 
 # 프로그램이 어떻게 돌아가다가 오류가 발생하는지 알 수 있는 화면 녹화 코드
 def record():
+    import cv2
+    import pyautogui as pg
+    import numpy as np
+
     resolution = (1920, 1080)
     codec = cv2.VideoWriter_fourcc(*'XVID')
     filename = 'verify.avi'
     location = 'C:/Users/DELL9020/Desktop/화면 녹화 테스트'
     fps = 10.0
-    out = cv2.VideoWriter(location+'/'+filename, codec, fps, resolution)
-
+    out = cv2.VideoWriter(location + '/' + filename, codec, fps, resolution)
     while True:
         img = pg.screenshot()
         frame = np.array(img)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         out.write(frame)
-
-        if cv2.waitKey(1) == ord('q'):
-            out.release()
-            cv2.destroyAllWindows()
-            break
+    out.release()
 
 
 # 관리자 권한으로 Pycharm실행 필요(윈도우에서 직접 실행 필요)
 
 def auto_scrap():
     # 필요한 라이브러리 import
+    import time
+    import cv2
+    import pyautogui as pg
+    import numpy as np
+    import sys
     import xlwings as xw
     import pandas as pd
     import pyautogui as pg
@@ -39,7 +39,11 @@ def auto_scrap():
     from webdriver_manager.chrome import ChromeDriverManager
     from win32comext.shell import shell # pywin32 라이브러리 설치 필요
 
+
 # 필요한 몇 가지 자체 함수 정의
+
+
+
     def confirm_image(img):
         if pg.locateOnScreen(f'{img}.png', confidence=0.8) is None:
             return False
@@ -71,6 +75,9 @@ def auto_scrap():
     #     params = ' '.join([script] + sys.argv[1:] + ['asadmin'])
     #     shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
     #     sys.exit()
+
+    # 녹화 시작
+
 
     # 스크랩 마스터 실행
     subprocess.call(["C:\Program Files (x86)\Dahami\ScrapMaster5\SM5UpdateProgram.exe"])
@@ -173,10 +180,28 @@ def auto_scrap():
 
         pg.sleep(2)
 
+    sys.exit()
 
-schedule.every().day.at("06:30:00").do(auto_scrap)
-#schedule.every().day.at("17:40:10").do(record)
-schedule.every().day.at("06:50:00").do(exit)
+
+t1 = threading.Thread(target=record())
+
+t2 = threading.Thread(target=auto_scrap())
+
+
+t1.start()
+t2.start()
+
+
+auto_scrap()
+
+
+
+
+
+import schedule
+import time
+schedule.every().day.at("17:29:20").do(auto_scrap)
+schedule.every().day.at("17:30:00").do(exit)
 
 
 while True:
